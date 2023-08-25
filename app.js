@@ -4,17 +4,21 @@ const app= express()
 const port=3000
 const tasks= require("./routes/tasks")
 require('dotenv').config()
-
+const notFound=require('./middleware/notFound')
+const errorHandler= require('./middleware/error-handler')
+// const asyncWrapper= require('./middleware/async')
 
 //middleware
 //to parse json in the req body use this middleware
+app.use(express.static('./public'))
 app.use(express.json())
-
 //routes
-app.get('/hello', (req,res)=>{
-    res.send("TaskManager app")
-})
+// app.get('/hello', (req,res)=>{
+//     res.send("TaskManager app")
+// })
 app.use('/api/v1/tasks',tasks)
+app.use(notFound)
+app.use(errorHandler)
 
 const url=process.env.MONGO_URI
 
